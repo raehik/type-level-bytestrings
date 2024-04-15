@@ -1,5 +1,14 @@
 {-# LANGUAGE UndecidableInstances #-}
 
+{- | Parsing digit strings to 'Natural's from 'Symbol's.
+
+May come in handy for sum-type generics. For example, say you wish to extract
+some number from the constructor name. With these type functions, you may do so
+on the type-level, instead of reifying immediately and performing term-level
+operations. This way, we get good performance without relying on optimizations,
+and problems with constructor names are caught at compile time.
+-}
+
 module Data.Type.Symbol.Natural where
 
 import GHC.TypeLits
