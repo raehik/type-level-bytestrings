@@ -31,6 +31,7 @@ source-repository head
 library
   exposed-modules:
       Data.Type.Byte
+      Data.Type.Symbol.Natural
       Data.Type.Symbol.Utf8
       Raehik.Data.Type.Common
   other-modules:
@@ -51,6 +52,7 @@ library
   ghc-options: -Wall
   build-depends:
       base >=4.14 && <5
+    , defun-core ==0.1.*
   default-language: GHC2021
 
 test-suite spec
@@ -74,6 +76,7 @@ test-suite spec
   ghc-options: -Wall
   build-depends:
       base >=4.14 && <5
+    , defun-core ==0.1.*
     , type-level-bytestrings
     , type-spec >=0.4.0.0 && <0.5
   default-language: GHC2021
