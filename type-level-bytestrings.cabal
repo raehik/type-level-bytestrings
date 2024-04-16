@@ -31,6 +31,8 @@ source-repository head
 library
   exposed-modules:
       Data.Type.Byte
+      Data.Type.Char.Digits
+      Data.Type.Symbol
       Data.Type.Symbol.Natural
       Data.Type.Symbol.Utf8
       Raehik.Data.Type.Common
