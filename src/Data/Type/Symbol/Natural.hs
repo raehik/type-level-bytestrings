@@ -35,6 +35,10 @@ type family PrettyE e where
     PrettyE 'EEmptySymbol = 'Text "empty symbol"
     PrettyE ('EBadDigit base ch idx) = PrettyEBadDigit base ch idx
 
+type family MapLeftPrettyE e where
+    MapLeftPrettyE ('Right a) = 'Right a
+    MapLeftPrettyE ('Left  e) = 'Left (PrettyE e)
+
 type family FromRightParseResult sym eab where
     FromRightParseResult _   ('Right a) = a
     FromRightParseResult sym ('Left  e) = TypeError
