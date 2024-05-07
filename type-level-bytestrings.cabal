@@ -5,7 +5,7 @@ cabal-version: 1.12
 -- see: https://github.com/sol/hpack
 
 name:           type-level-bytestrings
-version:        0.1.0
+version:        0.2.0
 synopsis:       Tools for manipulating type-level bytes and bytestrings
 description:    Please see README.md.
 category:       Types, Data, ByteString
@@ -49,7 +49,7 @@ library
       MagicHash
   ghc-options: -Wall
   build-depends:
-      base >=4.14 && <5
+      base >=4.17 && <5
     , defun-core ==0.1.*
   default-language: GHC2021
 
@@ -73,7 +73,7 @@ test-suite spec
       MagicHash
   ghc-options: -Wall
   build-depends:
-      base >=4.14 && <5
+      base >=4.17 && <5
     , defun-core ==0.1.*
     , type-level-bytestrings
     , type-spec >=0.4.0.0 && <0.5
