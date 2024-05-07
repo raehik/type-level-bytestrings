@@ -9,7 +9,7 @@ module Data.Type.Symbol.Utf8
   ) where
 
 import GHC.TypeLits
-import Raehik.Data.Type.Common ( type IfNatLte, type (++) )
+import Data.Type.Ord ( OrdCond )
 
 -- | Convert a type-level symbol to UTF-8.
 --
@@ -51,3 +51,11 @@ type UCP41 n = 0b11110000 + (n `Div` (2^18))
 type UCP42 n = 0b10000000 + ((n `Div` (2^12)) `Mod` (2^12))
 type UCP43 n = 0b10000000 + ((n `Div` (2^6)) `Mod` (2^6))
 type UCP44 n = 0b10000000 + (n `Mod` (2^6))
+
+-- | Simplified common type-level conditional.
+type IfNatLte n m fThen fElse = OrdCond (CmpNat n m) fThen fThen fElse
+
+-- | Concatenate two type-level lists. (gosh this really should get into base)
+type family l ++ r where
+    (a ': l) ++ r = a ': l ++ r
+    '[] ++ r = r
