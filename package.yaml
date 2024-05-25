@@ -56,7 +56,6 @@ ghc-options:
 
 dependencies:
 - base >= 4.17 && < 5
-- defun-core ^>= 0.1
 
 library:
   source-dirs: src
