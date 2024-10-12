@@ -1,9 +1,16 @@
 {-# LANGUAGE AllowAmbiguousTypes #-} -- fully ambiguous type class
 
-{- | Utilities for using @Natural@s as type-level bytes.
+{- | Utilities for using 'Natural's as type-level bytes.
+
+These functions are intended to be used with the @TypeApplications@ extension.
+
+TODO This might be where we have to switch implementations depending on
+endianness. It really confuses me and I don't know how to test big endian.
+
+Type application order is from left-to-right. Endianness is irrelevant as we
+don't use the return word as a word, 
 
 TODO would benefit from GHC 9.8's @RequiredTypeArguments@!
-TODO assert that this works regardless of endianness (pretty sure but still)
 -}
 
 module Data.Type.Byte
@@ -21,65 +28,65 @@ import Data.Bits ( unsafeShiftL, (.|.) )
 {-# INLINE reifyW64 #-}
 -- | Reify 8 type-level bytes to a 'Word64'.
 reifyW64
-    :: forall n1 n2 n3 n4 n5 n6 n7 n8
-    .  ( ReifyW8 n1
-       , ReifyW8 n2
-       , ReifyW8 n3
-       , ReifyW8 n4
-       , ReifyW8 n5
-       , ReifyW8 n6
-       , ReifyW8 n7
-       , ReifyW8 n8
+    :: forall b0 b1 b2 b3 b4 b5 b6 b7
+    .  ( ReifyW8 b0
+       , ReifyW8 b1
+       , ReifyW8 b2
+       , ReifyW8 b3
+       , ReifyW8 b4
+       , ReifyW8 b5
+       , ReifyW8 b6
+       , ReifyW8 b7
     ) => Word64
-reifyW64 =           (reifyW8' @n1)
-    .|. unsafeShiftL (reifyW8' @n2)  8
-    .|. unsafeShiftL (reifyW8' @n3) 16
-    .|. unsafeShiftL (reifyW8' @n4) 24
-    .|. unsafeShiftL (reifyW8' @n5) 32
-    .|. unsafeShiftL (reifyW8' @n6) 40
-    .|. unsafeShiftL (reifyW8' @n7) 48
-    .|. unsafeShiftL (reifyW8' @n8) 56
+reifyW64 =           (reifyW8' @b0)
+    .|. unsafeShiftL (reifyW8' @b1)  8
+    .|. unsafeShiftL (reifyW8' @b2) 16
+    .|. unsafeShiftL (reifyW8' @b3) 24
+    .|. unsafeShiftL (reifyW8' @b4) 32
+    .|. unsafeShiftL (reifyW8' @b5) 40
+    .|. unsafeShiftL (reifyW8' @b6) 48
+    .|. unsafeShiftL (reifyW8' @b7) 56
 
 {-# INLINE reifyW32 #-}
 -- | Reify 4 type-level bytes to a 'Word32'.
 reifyW32
-    :: forall n1 n2 n3 n4
-    .  ( ReifyW8 n1
-       , ReifyW8 n2
-       , ReifyW8 n3
-       , ReifyW8 n4
+    :: forall b0 b1 b2 b3
+    .  ( ReifyW8 b0
+       , ReifyW8 b1
+       , ReifyW8 b2
+       , ReifyW8 b3
     ) => Word32
-reifyW32 =           (reifyW8' @n1)
-    .|. unsafeShiftL (reifyW8' @n2)  8
-    .|. unsafeShiftL (reifyW8' @n3) 16
-    .|. unsafeShiftL (reifyW8' @n4) 24
+reifyW32 =           (reifyW8' @b0)
+    .|. unsafeShiftL (reifyW8' @b1)  8
+    .|. unsafeShiftL (reifyW8' @b2) 16
+    .|. unsafeShiftL (reifyW8' @b3) 24
 
 {-# INLINE reifyW16 #-}
 -- | Reify 2 type-level bytes to a 'Word16'.
 reifyW16
-    :: forall n1 n2
-    .  ( ReifyW8 n1
-       , ReifyW8 n2
+    :: forall b0 b1
+    .  ( ReifyW8 b0
+       , ReifyW8 b1
     ) => Word16
-reifyW16 =           (reifyW8' @n1)
-    .|. unsafeShiftL (reifyW8' @n2)  8
+reifyW16 =           (reifyW8' @b0)
+    .|. unsafeShiftL (reifyW8' @b1)  8
 
 {-# INLINE reifyW8 #-}
 -- | Reify a type-level byte to a 'Word8'.
-reifyW8 :: forall n. ReifyW8 n => Word8
-reifyW8 = reifyW8' @n
+reifyW8 :: forall b. ReifyW8 b => Word8
+reifyW8 = reifyW8' @b
 
--- | Reify a type-level byte (stored in a type-level 'Natural').
---
--- We use polymorphic literals to remove a layer of 'fromIntegral' that would
--- otherwise be required when reifying to non-'Word8' types (e.g. reifying
--- multiple type-level bytes into a multibyte type).
---
--- That 'fromIntegral' should always be removed at runtime, but it's ugly
--- syntactically.
---
--- Attempting to reify a 'Natural' larger than 255 results in a type error.
-class ReifyW8 (n :: Natural) where reifyW8' :: Num a => a
+{- | Reify a type-level byte (stored in a type-level 'Natural').
+
+We use polymorphic literals to remove a layer of 'fromIntegral' that would
+otherwise be required when reifying to non-'Word8' types (e.g. reifying multiple
+type-level bytes into a multibyte type).
+
+That 'fromIntegral' should always be removed at runtime, but it's ugly syntax.
+
+Attempting to reify a 'Natural' larger than 255 (0xFF) results in a type error.
+-}
+class ReifyW8 (b :: Natural) where reifyW8' :: Num a => a
 instance ReifyW8 0x00 where reifyW8' = 0x00
 instance ReifyW8 0x01 where reifyW8' = 0x01
 instance ReifyW8 0x02 where reifyW8' = 0x02

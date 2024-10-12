@@ -1,6 +1,6 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.35.2.
+-- This file has been generated from package.yaml by hpack version 0.36.1.
 --
 -- see: https://github.com/sol/hpack
 
@@ -47,7 +47,7 @@ library
       TypeFamilies
       DataKinds
       MagicHash
-  ghc-options: -Wall
+  ghc-options: -fhide-source-paths -Wno-unticked-promoted-constructors -Wall
   build-depends:
       base >=4.17 && <5
   default-language: GHC2021
@@ -70,7 +70,7 @@ test-suite spec
       TypeFamilies
       DataKinds
       MagicHash
-  ghc-options: -Wall
+  ghc-options: -fhide-source-paths -Wno-unticked-promoted-constructors -Wall
   build-depends:
       base >=4.17 && <5
     , type-level-bytestrings
