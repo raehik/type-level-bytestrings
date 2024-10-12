@@ -38,11 +38,18 @@
         };
         haskellProjects.ghc94 = {
           basePackages = pkgs.haskell.packages.ghc94;
-          devShell = defDevShell "ghc94";
-        };
-        haskellProjects.ghc92 = {
-          basePackages = pkgs.haskell.packages.ghc92;
-          devShell = defDevShell "ghc92";
+          devShell = {
+            mkShellArgs.name = "ghc94";
+            hoogle = false;
+            tools = _: {
+              # as of 2024-10-12 nixpkgs can't build cabal-install on GHC 9.4,
+              # so use global package
+              cabal-install = pkgs.cabal-install;
+              haskell-language-server = null;
+              hlint = null;
+              ghcid = null;
+            };
+          };
         };
       };
     };
